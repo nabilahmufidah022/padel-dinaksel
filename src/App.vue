@@ -20,7 +20,7 @@ export default {
 
   computed: {
     showLayout() {
-      return this.$route.meta.requiresAuth
+      return this.$route.path !== '/login'
     },
   },
 }

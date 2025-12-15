@@ -2,19 +2,21 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import LoginView from '@/views/login/LoginView.vue'
 import HomeView from '@/views/Home.vue'
+import ListCourt from '@/views/ListCourt.vue'
 
 const routes = [
-  {
-    path: '/',
-    redirect: '/login',
-  },
-  {
-    path: '/login',
-    component: LoginView,
-  },
+  { path: '/', redirect: '/login' },
+
+  { path: '/login', component: LoginView },
+
   {
     path: '/home',
     component: HomeView,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/book',
+    component: ListCourt,
     meta: { requiresAuth: true },
   },
 ]
@@ -25,16 +27,15 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const isLoggedIn = localStorage.getItem('loggedIn') === 'true'
+  const isDev = import.meta.env.DEV
+  const isLoggedIn = isDev || localStorage.getItem('loggedIn') === 'true'
+  console.log('to:', to.path, 'loggedIn:', isLoggedIn, 'isDev:', isDev)
 
-  // kalau butuh login tapi belum login
   if (to.meta.requiresAuth && !isLoggedIn) {
     next('/login')
-    return
+  } else {
+    next()
   }
-
-  // selain itu biarkan
-  next()
 })
 
 export default router

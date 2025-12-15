@@ -10,9 +10,9 @@
     </div>
 
     <nav class="nav-menu">
-      <router-link to="/home" exact>Home</router-link>
-      <router-link to="/book">List Court</router-link>
-      <router-link to="/bookings">My Bookings</router-link>
+      <RouterLink to="/home">Home</RouterLink>
+      <RouterLink to="/book">List Court</RouterLink>
+      <!-- <router-link to="/bookings">My Bookings</router-link> -->
     </nav>
 
     <div class="nav-right">
@@ -21,3 +21,9 @@
     </div>
   </header>
 </template>
+
+<script>
+export default {
+  name: 'Header',
+}
+</script>

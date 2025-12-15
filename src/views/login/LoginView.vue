@@ -62,16 +62,8 @@ export default {
 
   methods: {
     login() {
-      // contoh akun dummy
-      if (this.email === 'admin@example.com' && this.password === '123456') {
-        // simpan login
-        localStorage.setItem('loggedIn', 'true')
-
-        // redirect
-        this.$router.push('/home')
-      } else {
-        alert('Email atau password salah!')
-      }
+      localStorage.setItem('loggedIn', 'true')
+      this.$router.push('/home')
     },
   },
 }

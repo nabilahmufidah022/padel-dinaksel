@@ -78,8 +78,8 @@ export default {
       courts: [
         {
           id: 1,
-          name: 'Court 1',
-          nextTime: '10:00 AM',
+          name: 'Court A - Premium',
+          price: 150000,
           status: 'Available',
           image:
             'https://image.made-in-china.com/202f0j00pfGknuYRVVrK/Padel-Court-Padel-Tennis-Court-Regular-Padel-Court.webp',
@@ -94,9 +94,8 @@ export default {
         },
         {
           id: 3,
-          name: 'Court 2',
-          nextTime: '2:00 PM',
-          status: 'Booked',
+          name: 'Court A - Premium',
+          price: 150000,
           image:
             'https://blue.kumparan.com/image/upload/fl_progressive,fl_lossy,c_fill,f_auto,q_auto:best,w_640/v1634025439/01jx9dpphphjvaper0f43hfyms.jpg',
         },
