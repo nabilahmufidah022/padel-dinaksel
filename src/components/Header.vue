@@ -2,16 +2,16 @@
   <!-- NAVBAR -->
   <header class="navbar">
     <div class="nav-left">
-      <div class="logo-circle">DOY</div>
+      <div class="logo-circle"><img src="@/assets/logo.png" alt="Logo Dinaksel" /></div>
       <div class="logo-text">
-        <h2>PT DOY Padel Courts</h2>
-        <span>Play Smart, Play Doy.</span>
+        <h2>PT Dinaksel Padel Arena</h2>
+        <span>Play Smart, Play Hard.</span>
       </div>
     </div>
 
     <nav class="nav-menu">
       <router-link to="/home" exact>Home</router-link>
-      <router-link to="/book">Book Court</router-link>
+      <router-link to="/book">List Court</router-link>
       <router-link to="/bookings">My Bookings</router-link>
     </nav>
 

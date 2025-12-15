@@ -2,13 +2,15 @@
   <div class="home-page">
     <!-- HERO -->
     <section class="hero">
-      <h1>PT DOY Padel Courts</h1>
-      <p class="subtitle">Play Smart, Play Doy.</p>
-      <p class="subtitle">World-class padel court booking system</p>
+      <div class="hero-content">
+        <h1>PT Dinaksel Padel Arena</h1>
+        <h2>Play Smart, Play Hard.</h2>
+        <p>Premium padel sports center with world-class facilities</p>
 
-      <div class="hero-buttons">
-        <button class="btn-primary">Book Court</button>
-        <button class="btn-secondary">View Availability</button>
+        <div class="hero-buttons">
+          <button class="btn-primary">Book Court Now</button>
+          <button class="btn-outline">View Availability</button>
+        </div>
       </div>
     </section>
 
@@ -40,22 +42,24 @@
     </section>
 
     <!-- COURTS -->
-    <h2 class="section-title">Available Courts</h2>
+    <div class="courts-wrapper">
+      <h2 class="section-title">Available Courts</h2>
 
-    <section class="courts-container">
-      <div v-for="court in courts" :key="court.id" class="court-card">
-        <img :src="court.image" />
+      <section class="courts-container">
+        <div v-for="court in courts" :key="court.id" class="court-card">
+          <img :src="court.image" />
 
-        <div class="status" :class="{ booked: court.status === 'Booked' }">
-          {{ court.status }}
+          <div class="status" :class="{ booked: court.status === 'Booked' }">
+            {{ court.status }}
+          </div>
+
+          <div class="court-content">
+            <h4>{{ court.name }}</h4>
+            <small>Next: {{ court.nextTime }}</small>
+          </div>
         </div>
-
-        <div class="court-content">
-          <h4>{{ court.name }}</h4>
-          <small>Next: {{ court.nextTime }}</small>
-        </div>
-      </div>
-    </section>
+      </section>
+    </div>
   </div>
 </template>
 
@@ -77,14 +81,32 @@ export default {
           name: 'Court 1',
           nextTime: '10:00 AM',
           status: 'Available',
-          image: 'https://images.pexels.com/photos/5739120/pexels-photo-5739120.jpeg',
+          image:
+            'https://image.made-in-china.com/202f0j00pfGknuYRVVrK/Padel-Court-Padel-Tennis-Court-Regular-Padel-Court.webp',
         },
         {
           id: 2,
           name: 'Court 2',
           nextTime: '2:00 PM',
           status: 'Booked',
-          image: 'https://images.pexels.com/photos/1431282/pexels-photo-1431282.jpeg',
+          image:
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuOSSkSJRGKQmNzyi9ep2PMjYrorXLmFPnpg&s',
+        },
+        {
+          id: 3,
+          name: 'Court 2',
+          nextTime: '2:00 PM',
+          status: 'Booked',
+          image:
+            'https://blue.kumparan.com/image/upload/fl_progressive,fl_lossy,c_fill,f_auto,q_auto:best,w_640/v1634025439/01jx9dpphphjvaper0f43hfyms.jpg',
+        },
+        {
+          id: 4,
+          name: 'Court 1',
+          nextTime: '10:00 AM',
+          status: 'Available',
+          image:
+            'https://blue.kumparan.com/image/upload/fl_progressive,fl_lossy,c_fill,f_auto,q_auto:best,w_640/v1634025439/01jx9p6pecd78yrpf63hemqsxk.jpg',
         },
       ],
     }
@@ -97,71 +119,92 @@ export default {
   margin-top: 90px;
   background: #f9f9f9;
 }
+
 /* NAVBAR */
 .navbar {
+  height: 90px;
   width: 100%;
-  padding: 18px 50px;
+  padding: 0 40px;
   background: #ffffff;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 50;
-
+  z-index: 100;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
 }
 
+/* LEFT */
 .nav-left {
   display: flex;
-  align-items: center;
-  gap: 10px;
+  align-items: center; /* 🔥 bikin sejajar vertikal */
+  gap: 12px;
 }
 
+/* LOGO */
 .logo-circle {
-  background: #2f6c2f;
-  color: white;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  width: 55px;
-  height: 55px;
+  overflow: hidden;
+  flex-shrink: 0; /* 🔥 cegah logo mengecil / dorong teks */
+}
+
+.logo-circle img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.logo-text {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
+  flex-direction: column;
+  line-height: 1.2;
 }
 
 .logo-text h2 {
-  margin: 0;
   font-size: 18px;
-}
-.logo-text span {
-  font-size: 12px;
-  color: #5fa65c;
+  margin: 0;
+  white-space: nowrap;
 }
 
+.logo-text span {
+  font-size: 13px;
+  color: #a7d763;
+}
+
+/* CENTER MENU */
 .nav-menu {
   display: flex;
-  gap: 35px;
+  gap: 28px;
 }
 
 .nav-menu a {
   font-weight: 600;
-  text-decoration: none;
+  font-size: 15px;
   color: #333;
-}
-
-.nav-menu a.router-link-active {
-  color: white;
-  background: #1c4b1c;
+  text-decoration: none;
   padding: 8px 18px;
   border-radius: 20px;
+  transition: all 0.3s ease;
 }
 
+.nav-menu a:hover {
+  background: #a7d763;
+}
+
+.nav-menu a.router-link-exact-active {
+  background: #a7d763;
+  color: #1c4b1c;
+}
+
+/* RIGHT */
 .nav-right {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 40px;
 }
 
 .user-circle {
@@ -173,52 +216,69 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-weight: bold;
+  font-weight: 700;
+}
+
+.username {
+  font-weight: 600;
+  color: #333;
 }
 
 /* HERO */
 .hero {
-  background: url('https://images.pexels.com/photos/5739120/pexels-photo-5739120.jpeg') center/cover
-    no-repeat;
-  height: 350px;
+  height: 420px;
+  background:
+    linear-gradient(rgba(15, 83, 65, 0.8), rgba(15, 83, 65, 0.8)), url('@/assets/bg_padel.jpg');
+  background-size: cover;
+  background-position: center;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
-  color: white;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+  justify-content: center;
+  text-align: center;
 }
 
-.hero h1 {
-  font-size: 48px;
+.hero-content {
+  color: #fff;
 }
 
-.subtitle {
-  font-size: 20px;
+.hero-content h1 {
+  font-size: 42px;
+  margin-bottom: 10px;
+}
+
+.hero-content h2 {
+  color: #a3e635;
+  margin-bottom: 10px;
+}
+
+.hero-content p {
+  font-size: 16px;
+  margin-bottom: 30px;
 }
 
 .hero-buttons {
-  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
 }
 
 .btn-primary {
-  padding: 12px 25px;
-  background: #82c91e;
-  border-radius: 25px;
-  color: white;
-  font-weight: bold;
+  background: #a3e635;
+  color: #14532d;
   border: none;
+  padding: 12px 22px;
+  border-radius: 25px;
+  font-weight: 600;
   cursor: pointer;
-  margin-right: 15px;
 }
 
-.btn-secondary {
-  padding: 12px 25px;
-  background: white;
+.btn-outline {
+  background: transparent;
+  color: #fff;
+  border: 2px solid #fff;
+  padding: 12px 22px;
   border-radius: 25px;
-  border: 2px solid #1f8d57;
-  color: #1f8d57;
-  font-weight: bold;
+  font-weight: 600;
   cursor: pointer;
 }
 
@@ -232,7 +292,7 @@ export default {
 
 .feature-box {
   background: white;
-  width: 230px;
+  width: 250px;
   padding: 25px;
   border-radius: 15px;
   box-shadow: 0 3px 7px rgba(0, 0, 0, 0.1);
@@ -251,22 +311,26 @@ export default {
 }
 
 /* COURTS LIST */
+.courts-wrapper {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
 .section-title {
-  margin-left: 40px;
-  margin-top: 10px;
-  font-size: 20px;
+  margin: 20px 0 10px 0;
+  font-size: 22px;
   font-weight: bold;
 }
 
 .courts-container {
   display: flex;
   gap: 25px;
-  padding: 20px 40px 50px;
   flex-wrap: wrap;
 }
 
 .court-card {
-  width: 260px;
+  width: 300px;
   background: white;
   border-radius: 15px;
   box-shadow: 0 3px 7px rgba(0, 0, 0, 0.1);
