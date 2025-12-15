@@ -59,9 +59,9 @@
           <button
             :disabled="!court.available"
             :class="{ disabled: !court.available }"
-            @click="court.available && goToBooking(court.id)"
+            @click="goToBooking(court.id)"
           >
-            {{ court.available ? 'Pesan Sekarang' : 'Tidak Tersedia' }}
+            Pesan Sekarang
           </button>
         </div>
       </div>
@@ -71,6 +71,7 @@
 <script>
 export default {
   name: 'ListCourt',
+
   data() {
     return {
       selectedDate: '',
@@ -109,17 +110,14 @@ export default {
 
   computed: {
     filteredCourts() {
-      if (this.availableOnly) {
-        return this.courts.filter((c) => c.available)
-      }
-      return this.courts
+      return this.availableOnly ? this.courts.filter((c) => c.available) : this.courts
     },
   },
 
   methods: {
     goToBooking(courtId) {
       if (!this.selectedDate || !this.selectedTime) {
-        alert('Silakan pilih tanggal dan waktu terlebih dahulu')
+        alert('Pilih tanggal dan waktu terlebih dahulu')
         return
       }
 

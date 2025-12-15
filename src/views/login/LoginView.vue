@@ -69,7 +69,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 /* Background */
 .login-page {
   width: 100vw;
