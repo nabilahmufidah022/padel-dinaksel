@@ -20,7 +20,7 @@ export default {
 
   computed: {
     showLayout() {
-      return this.$route.path !== '/login'
+      return !['/login', '/register'].includes(this.$route.path)
     },
   },
 }
