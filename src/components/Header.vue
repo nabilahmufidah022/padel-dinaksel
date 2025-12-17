@@ -12,7 +12,7 @@
     <nav class="nav-menu">
       <RouterLink to="/home">Home</RouterLink>
       <RouterLink to="/book">List Court</RouterLink>
-      <!-- <router-link to="/bookings">My Bookings</router-link> -->
+      <router-link to="/my-booking">My Bookings</router-link>
     </nav>
 
     <div class="nav-right">

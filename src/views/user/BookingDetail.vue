@@ -148,7 +148,7 @@ export default {
       localStorage.setItem('bookings', JSON.stringify(bookings))
 
       alert('Booking berhasil!')
-      this.$router.push('/home')
+      this.$router.push('/my-booking')
     },
   },
 }

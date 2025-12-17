@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import LoginView from '@/views/login/LoginView.vue'
 import HomeView from '@/views/user/Home.vue'
 import ListCourt from '@/views/user/ListCourt.vue'
+import ListBooking from '@/views/user/ListBooking.vue'
 
 const routes = [
   { path: '/', redirect: '/login' },
@@ -22,6 +23,11 @@ const routes = [
     path: '/booking/:id',
     name: 'BookingDetail',
     component: () => import('@/views/user/BookingDetail.vue'),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/my-booking',
+    component: ListBooking,
     meta: { requiresAuth: true },
   },
 ]
