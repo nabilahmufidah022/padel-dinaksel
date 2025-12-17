@@ -1,23 +1,37 @@
 <template>
   <!-- NAVBAR -->
   <header class="navbar">
-    <div class="nav-left">
-      <div class="logo-circle"><img src="@/assets/logo.png" alt="Logo Dinaksel" /></div>
-      <div class="logo-text">
-        <h2>PT Dinaksel Padel Arena</h2>
-        <span>Play Smart, Play Hard.</span>
+    <div class="navbar-inner">
+      <!-- LEFT -->
+      <div class="nav-left">
+        <div class="logo-circle">
+          <img src="@/assets/logo.png" />
+        </div>
+        <div class="logo-text">
+          <h2>PT Dinaksel Padel Arena</h2>
+          <span>Play Smart, Play Hard.</span>
+        </div>
       </div>
-    </div>
 
-    <nav class="nav-menu">
-      <RouterLink to="/home">Home</RouterLink>
-      <RouterLink to="/book">List Court</RouterLink>
-      <router-link to="/my-booking">My Bookings</router-link>
-    </nav>
+      <!-- CENTER -->
+      <nav class="nav-menu">
+        <RouterLink to="/home">Home</RouterLink>
+        <RouterLink to="/book">List Court</RouterLink>
+        <RouterLink to="/my-booking">My Bookings</RouterLink>
+      </nav>
 
-    <div class="nav-right">
-      <div class="user-circle">JD</div>
-      <span class="username">John</span>
+      <!-- RIGHT -->
+      <div class="nav-right" ref="profileArea">
+        <div class="profile-wrapper" @click="toggleProfile">
+          <div class="user-circle">JD</div>
+          <span class="username">John</span>
+        </div>
+
+        <div v-if="showProfile" class="profile-dropdown">
+          <RouterLink to="/profile">My Account</RouterLink>
+          <button class="logout" @click="logout">Logout</button>
+        </div>
+      </div>
     </div>
   </header>
 </template>
@@ -25,45 +39,77 @@
 <script>
 export default {
   name: 'Header',
+
+  data() {
+    return {
+      showProfile: false,
+    }
+  },
+
+  methods: {
+    toggleProfile() {
+      this.showProfile = !this.showProfile
+    },
+
+    logout() {
+      localStorage.clear()
+      this.$router.push('/login')
+    },
+
+    handleClickOutside(event) {
+      if (!this.$refs.profileArea.contains(event.target)) {
+        this.showProfile = false
+      }
+    },
+  },
+
+  mounted() {
+    document.addEventListener('click', this.handleClickOutside)
+  },
+
+  beforeUnmount() {
+    document.removeEventListener('click', this.handleClickOutside)
+  },
 }
 </script>
 
 <style scoped>
-.home-page {
-  margin-top: 90px;
-  background: #f9f9f9;
-}
-
-/* NAVBAR */
 .navbar {
-  height: 90px;
-  width: 100%;
-  padding: 0 40px;
-  background: #ffffff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   position: fixed;
   top: 0;
   left: 0;
+  width: 100%;
+  height: 90px;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   z-index: 100;
+  display: flex;
+  justify-content: center;
+}
+
+/* ===== NAVBAR INNER (INI KUNCINYA) ===== */
+.navbar-inner {
+  width: 100%;
+  max-width: 1280px; /* 🔥 BIKIN SEMUA RAPI */
+  padding: 0 24px;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-/* LEFT */
+/* ===== LEFT ===== */
 .nav-left {
   display: flex;
-  align-items: center; /* 🔥 bikin sejajar vertikal */
+  align-items: center;
   gap: 12px;
 }
 
-/* LOGO */
 .logo-circle {
   width: 48px;
   height: 48px;
   border-radius: 50%;
   overflow: hidden;
-  flex-shrink: 0; /* 🔥 cegah logo mengecil / dorong teks */
 }
 
 .logo-circle img {
@@ -72,15 +118,9 @@ export default {
   object-fit: contain;
 }
 
-.logo-text {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.2;
-}
-
 .logo-text h2 {
-  font-size: 18px;
   margin: 0;
+  font-size: 18px;
   white-space: nowrap;
 }
 
@@ -89,24 +129,18 @@ export default {
   color: #a7d763;
 }
 
-/* CENTER MENU */
+/* ===== CENTER MENU ===== */
 .nav-menu {
   display: flex;
-  gap: 28px;
+  gap: 24px;
 }
 
 .nav-menu a {
+  padding: 8px 16px;
+  border-radius: 20px;
   font-weight: 600;
-  font-size: 15px;
   color: #333;
   text-decoration: none;
-  padding: 8px 18px;
-  border-radius: 20px;
-  transition: all 0.3s ease;
-}
-
-.nav-menu a:hover {
-  background: #a7d763;
 }
 
 .nav-menu a.router-link-exact-active {
@@ -114,11 +148,16 @@ export default {
   color: #1c4b1c;
 }
 
-/* RIGHT */
+/* ===== RIGHT ===== */
 .nav-right {
+  position: relative;
+}
+
+.profile-wrapper {
   display: flex;
   align-items: center;
-  gap: 40px;
+  gap: 10px;
+  cursor: pointer;
 }
 
 .user-circle {
@@ -128,13 +167,41 @@ export default {
   background: #a7d763;
   color: #235b13;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   font-weight: 700;
 }
 
 .username {
   font-weight: 600;
-  color: #333;
+  white-space: nowrap;
+}
+
+/* ===== DROPDOWN ===== */
+.profile-dropdown {
+  position: absolute;
+  top: 56px;
+  right: 0;
+  background: #fff;
+  width: 180px;
+  padding: 8px;
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.profile-dropdown a,
+.logout {
+  padding: 10px 14px;
+  display: block;
+  border-radius: 10px;
+  font-weight: 600;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.logout {
+  color: #d9534f;
 }
 </style>

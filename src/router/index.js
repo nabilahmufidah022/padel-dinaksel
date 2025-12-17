@@ -8,9 +8,11 @@ import ListBooking from '@/views/user/ListBooking.vue'
 
 const routes = [
   { path: '/', redirect: '/login' },
+  { path: '/login', component: LoginView },
   {
-    path: '/login',
-    component: LoginView,
+    path: '/profile',
+    component: () => import('@/views/user/Profile.vue'),
+    meta: { requiresAuth: true },
   },
 
   {

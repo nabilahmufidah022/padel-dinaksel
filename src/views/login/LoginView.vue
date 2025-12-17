@@ -6,7 +6,7 @@
     <!-- Login Card -->
     <div class="card">
       <!-- Logo -->
-      <div class="logo">DOY</div>
+      <div class="logo-circle"><img src="@/assets/logo.png" alt="Logo Dinaksel" /></div>
 
       <h2>Welcome Back</h2>
       <p class="subtitle">Sign in to book your favorite court</p>
@@ -45,7 +45,7 @@
     </div>
 
     <!-- Admin Login Button -->
-    <button class="admin-login">Admin Login ❔</button>
+    <button class="admin-login" @click="$router.push('/admin/login')">Admin Login ❔</button>
   </div>
 </template>
 

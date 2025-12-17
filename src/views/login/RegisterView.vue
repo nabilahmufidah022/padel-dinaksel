@@ -4,7 +4,7 @@
 
     <div class="card">
       <!-- Logo -->
-      <div class="logo">DOY</div>
+      <div class="logo-circle"><img src="@/assets/logo.png" alt="Logo Dinaksel" /></div>
 
       <h2>Create Account</h2>
       <p class="subtitle">Join and start booking your court</p>
