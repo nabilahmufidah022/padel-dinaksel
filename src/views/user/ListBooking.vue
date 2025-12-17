@@ -63,6 +63,8 @@ export default {
 <style scoped>
 .page-container {
   padding: 32px 40px;
+  margin: 100px auto;
+  margin-top: 100px;
 }
 
 .page-title {

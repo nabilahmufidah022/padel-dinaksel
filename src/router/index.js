@@ -6,19 +6,22 @@ import HomeView from '@/views/user/Home.vue'
 import ListCourt from '@/views/user/ListCourt.vue'
 import ListBooking from '@/views/user/ListBooking.vue'
 
+import AdminLogin from '@/views/admin/AdminLogin.vue'
+import AdminDashboard from '@/views/admin/AdminDashboard.vue'
+
 const routes = [
   { path: '/', redirect: '/login' },
   { path: '/login', component: LoginView },
   {
     path: '/profile',
     component: () => import('@/views/user/Profile.vue'),
-    meta: { requiresAuth: true },
+    meta: { role: 'admin' },
   },
 
   {
     path: '/home',
     component: HomeView,
-    meta: { requiresAuth: true },
+    meta: { role: 'user' },
   },
   {
     path: '/register',
@@ -28,24 +31,35 @@ const routes = [
   {
     path: '/book',
     component: ListCourt,
-    meta: { requiresAuth: true },
+    meta: { role: 'user' },
   },
   {
     path: '/booking/:id',
     name: 'BookingDetail',
     component: () => import('@/views/user/BookingDetail.vue'),
-    meta: { requiresAuth: true },
+    meta: { role: 'user' },
   },
   {
     path: '/my-booking',
     component: ListBooking,
-    meta: { requiresAuth: true },
+    meta: { role: 'user' },
   },
   {
     path: '/booking-detail/:id',
     name: 'BookingViewDetail',
     component: () => import('@/views/user/BookingViewDetail.vue'),
-    meta: { requiresAuth: true },
+    meta: { role: 'user' },
+  },
+
+  {
+    path: '/admin/login',
+    component: AdminLogin,
+  },
+
+  {
+    path: '/admin/dashboard',
+    component: AdminDashboard,
+    meta: { role: 'admin' },
   },
 ]
 
@@ -57,12 +71,19 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const isDev = import.meta.env.DEV
   const isLoggedIn = isDev || localStorage.getItem('loggedIn') === 'true'
+  const role = localStorage.getItem('role')
 
-  if (to.meta.requiresAuth && !isLoggedIn) {
-    next('/login')
-  } else {
-    next()
+  if (to.meta.requiresAuth) {
+    if (!isLoggedIn) {
+      return next('/login')
+    }
+
+    if (to.meta.role && to.meta.role !== role) {
+      return next('/login')
+    }
   }
+
+  next()
 })
 
 export default router

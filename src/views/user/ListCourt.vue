@@ -1,8 +1,5 @@
 <template>
   <div class="page-container">
-    <!-- JUDUL -->
-    <h1 class="page-title">Daftar Lapangan Padel</h1>
-
     <!-- FILTER -->
     <div class="filter-card">
       <div class="filter-header">
@@ -152,6 +149,7 @@ export default {
 
 .page-container {
   padding: 30px 40px;
+  margin: 50px auto;
 }
 
 .page-title {

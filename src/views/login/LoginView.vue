@@ -66,9 +66,10 @@ export default {
 
       if (user && user.email === this.email && user.password === this.password) {
         localStorage.setItem('loggedIn', 'true')
+        localStorage.setItem('role', 'user')
         this.$router.push('/home')
       } else {
-        alert('Email or password is incorrect')
+        alert('Email atau password salah')
       }
     },
   },

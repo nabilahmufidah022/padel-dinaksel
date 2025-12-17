@@ -53,20 +53,12 @@ export default {
 
   methods: {
     register() {
-      if (this.password !== this.confirmPassword) {
-        alert('Password and confirmation do not match')
-        return
-      }
-
-      // Simulasi simpan akun (nanti bisa diganti API)
       const user = {
-        name: this.name,
         email: this.email,
         password: this.password,
       }
 
       localStorage.setItem('user', JSON.stringify(user))
-
       alert('Account created successfully!')
       this.$router.push('/login')
     },

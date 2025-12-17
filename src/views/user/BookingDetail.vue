@@ -161,7 +161,7 @@ export default {
 .booking-page {
   padding: 24px 16px;
   max-width: 980px;
-  margin: 0 auto;
+  margin: 100px auto;
 }
 
 .page-title {
