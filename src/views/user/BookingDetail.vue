@@ -75,6 +75,9 @@
 </template>
 
 <script>
+import { useCourtsStore } from '@/stores/courts'
+import { useBookingsStore } from '@/stores/bookings'
+
 export default {
   name: 'BookingDetail',
 
@@ -85,6 +88,8 @@ export default {
       time: '',
       duration: 1,
       times: ['07:00', '09:00', '11:00', '13:00', '15:00', '17:00'],
+      courtsStore: null,
+      bookingsStore: null,
     }
   },
 
@@ -100,31 +105,14 @@ export default {
     this.date = this.$route.query.date || ''
     this.time = this.$route.query.time || ''
 
-    const courts = [
-      {
-        id: 1,
-        name: 'Court A - Premium',
-        price: 150000,
-        image:
-          'https://image.made-in-china.com/202f0j00pfGknuYRVVrK/Padel-Court-Padel-Tennis-Court-Regular-Padel-Court.webp',
-      },
-      {
-        id: 2,
-        name: 'Court B - Standard',
-        price: 120000,
-        image:
-          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuOSSkSJRGKQmNzyi9ep2PMjYrorXLmFPnpg&s',
-      },
-      {
-        id: 3,
-        name: 'Court C - Economy',
-        price: 100000,
-        image:
-          'https://blue.kumparan.com/image/upload/fl_progressive,fl_lossy,c_fill,f_auto,q_auto:best,w_640/v1634025439/01jx9dpphphjvaper0f43hfyms.jpg',
-      },
-    ]
+    this.courtsStore = useCourtsStore()
+    this.bookingsStore = useBookingsStore()
 
-    this.court = courts.find((c) => c.id === courtId)
+    this.courtsStore.load()
+    this.bookingsStore.load()
+
+    const found = this.courtsStore.courts.find((c) => c.id === courtId)
+    if (found) this.court = found
   },
 
   methods: {
@@ -134,11 +122,7 @@ export default {
         return
       }
 
-      const bookingId = 'DOY-' + Date.now()
-      const bookings = JSON.parse(localStorage.getItem('bookings')) || []
-
-      bookings.push({
-        bookingId,
+      const booking = this.bookingsStore.addBooking({
         courtId: this.court.id,
         courtName: this.court.name,
         date: this.date,
@@ -148,10 +132,8 @@ export default {
         image: this.court.image,
       })
 
-      localStorage.setItem('bookings', JSON.stringify(bookings))
-
       alert('Booking berhasil!')
-      this.$router.push('/my-booking')
+      this.$router.push('/user/my-booking')
     },
   },
 }

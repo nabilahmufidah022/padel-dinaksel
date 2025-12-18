@@ -12,7 +12,6 @@
         <RouterLink to="/admin/dashboard">Dashboard</RouterLink>
         <RouterLink to="/admin/courts">Courts</RouterLink>
         <RouterLink to="/admin/bookings">Bookings</RouterLink>
-        <RouterLink to="/admin/users">Users</RouterLink>
       </nav>
 
       <!-- RIGHT -->

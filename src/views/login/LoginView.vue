@@ -21,22 +21,8 @@
           <span class="eye">👁️</span>
         </div>
 
-        <div class="options">
-          <label><input type="checkbox" /> Remember me</label>
-          <a href="#" class="forgot">Forgot password?</a>
-        </div>
-
         <button type="submit" class="btn">Sign In</button>
       </form>
-
-      <div class="divider">
-        <span>OR CONTINUE WITH</span>
-      </div>
-
-      <div class="social-buttons">
-        <button class="social google">Google</button>
-        <button class="social apple">Apple</button>
-      </div>
 
       <p class="create">
         Don’t have an account?

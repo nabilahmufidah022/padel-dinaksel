@@ -31,9 +31,11 @@ const routes = [
       { path: 'home', component: HomeView },
       { path: 'book', component: ListCourt },
       { path: 'my-booking', component: ListBooking },
+      { path: 'booking-detail/:id', component: () => import('@/views/user/BookingViewDetail.vue') },
       { path: 'profile', component: ProfileView },
       {
         path: 'booking/:id',
+        name: 'BookingDetail',
         component: () => import('@/views/user/BookingDetail.vue'),
       },
     ],
@@ -64,8 +66,9 @@ const routes = [
         component: () => import('@/views/admin/AdminBookings.vue'),
       },
       {
-        path: 'users',
-        component: () => import('@/views/admin/AdminUsers.vue'),
+        path: 'bookings/:id',
+        component: () => import('@/views/admin/AdminBookingDetail.vue'),
+        props: true,
       },
     ],
   },

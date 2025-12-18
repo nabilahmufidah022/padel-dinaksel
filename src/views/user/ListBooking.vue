@@ -28,35 +28,54 @@
 
         <div class="actions">
           <button class="btn-outline" @click="goDetail(item.bookingId)">View Details</button>
-          <button class="btn-danger">Cancel Booking</button>
+          <button class="btn-danger" @click="cancel(item.bookingId)">Cancel Booking</button>
         </div>
       </div>
 
       <!-- RIGHT -->
       <div class="booking-right">
-        <span class="status confirmed">Confirmed</span>
+        <span :class="['status', item.status]">{{ capitalize(item.status) }}</span>
         <p class="price">Rp {{ item.total.toLocaleString('id-ID') }}</p>
       </div>
     </div>
   </div>
 </template>
 <script>
+import { useBookingsStore } from '@/stores/bookings'
+
 export default {
   name: 'BookingList',
 
   data() {
     return {
-      bookings: [],
+      bookingsStore: null,
     }
   },
+
+  computed: {
+    bookings() {
+      return this.bookingsStore ? this.bookingsStore.bookings : []
+    },
+  },
+
   methods: {
     goDetail(id) {
-      this.$router.push(`/booking-detail/${id}`)
+      this.$router.push(`/user/booking-detail/${id}`)
+    },
+
+    cancel(id) {
+      if (!confirm('Yakin ingin membatalkan booking ini?')) return
+      this.bookingsStore.removeBooking(id)
+    },
+    capitalize(s) {
+      if (!s) return ''
+      return s.charAt(0).toUpperCase() + s.slice(1)
     },
   },
 
   mounted() {
-    this.bookings = JSON.parse(localStorage.getItem('bookings')) || []
+    this.bookingsStore = useBookingsStore()
+    this.bookingsStore.load()
   },
 }
 </script>

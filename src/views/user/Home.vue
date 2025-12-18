@@ -8,8 +8,8 @@
         <p>Premium padel sports center with world-class facilities</p>
 
         <div class="hero-buttons">
-          <button class="btn-primary">Book Court Now</button>
-          <button class="btn-outline">View Availability</button>
+          <button class="btn-primary" @click="$router.push('/user/book')">Book Court Now</button>
+          <button class="btn-outline" @click="scrollToAvailability">View Availability</button>
         </div>
       </div>
     </section>
@@ -42,29 +42,43 @@
     </section>
 
     <!-- COURTS -->
-    <div class="courts-wrapper">
+
+    <!-- AVAILABLE COURTS -->
+    <div id="available-courts" class="courts-wrapper">
       <h2 class="section-title">Available Courts</h2>
 
-      <section class="courts-container">
-        <div v-for="court in courts" :key="court.id" class="court-card">
-          <img :src="court.image" />
+      <div class="court-grid">
+        <div class="court-card" v-for="court in availableCourts" :key="court.id">
+          <div class="court-image">
+            <img :src="court.image" alt="Court Image" />
 
-          <div class="status" :class="{ booked: court.status === 'Booked' }">
-            {{ court.status }}
+            <!-- STATUS BADGE -->
+            <span class="badge available">Available</span>
           </div>
 
           <div class="court-content">
-            <h4>{{ court.name }}</h4>
-            <small>Next: {{ court.nextTime }}</small>
+            <h3>{{ court.name }}</h3>
+
+            <p class="price">
+              Rp {{ court.price ? court.price.toLocaleString('id-ID') : '-' }}
+              <span>/jam</span>
+            </p>
+
+            <small v-if="court.nextTime"> Next Available: {{ court.nextTime }} </small>
+
+            <button @click="$router.push({ name: 'BookingDetail', params: { id: court.id } })">
+              Book Now
+            </button>
           </div>
         </div>
-      </section>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import { MapPin, Clock, Users, Calendar } from 'lucide-vue-next'
+import { useCourtsStore } from '@/stores/courts'
 
 export default {
   components: {
@@ -75,40 +89,32 @@ export default {
   },
   data() {
     return {
-      courts: [
-        {
-          id: 1,
-          name: 'Court A - Premium',
-          price: 150000,
-          status: 'Available',
-          image:
-            'https://image.made-in-china.com/202f0j00pfGknuYRVVrK/Padel-Court-Padel-Tennis-Court-Regular-Padel-Court.webp',
-        },
-        {
-          id: 2,
-          name: 'Court 2',
-          nextTime: '2:00 PM',
-          status: 'Booked',
-          image:
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuOSSkSJRGKQmNzyi9ep2PMjYrorXLmFPnpg&s',
-        },
-        {
-          id: 3,
-          name: 'Court A - Premium',
-          price: 150000,
-          image:
-            'https://blue.kumparan.com/image/upload/fl_progressive,fl_lossy,c_fill,f_auto,q_auto:best,w_640/v1634025439/01jx9dpphphjvaper0f43hfyms.jpg',
-        },
-        {
-          id: 4,
-          name: 'Court 1',
-          nextTime: '10:00 AM',
-          status: 'Available',
-          image:
-            'https://blue.kumparan.com/image/upload/fl_progressive,fl_lossy,c_fill,f_auto,q_auto:best,w_640/v1634025439/01jx9p6pecd78yrpf63hemqsxk.jpg',
-        },
-      ],
+      courtsStore: null,
     }
+  },
+
+  computed: {
+    courts() {
+      return this.courtsStore ? this.courtsStore.courts : []
+    },
+
+    availableCourts() {
+      return this.courts.filter((c) => c.available)
+    },
+  },
+  mounted() {
+    this.courtsStore = useCourtsStore()
+    this.courtsStore.load()
+  },
+  methods: {
+    scrollToAvailability() {
+      const el = document.getElementById('available-courts')
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      } else {
+        this.$router.push({ path: '/', hash: '#available-courts' })
+      }
+    },
   },
 }
 </script>
@@ -208,63 +214,95 @@ export default {
 .courts-wrapper {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 30px 20px 60px;
 }
 
 .section-title {
-  margin: 20px 0 10px 0;
-  font-size: 22px;
-  font-weight: bold;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 20px;
 }
 
-.courts-container {
-  display: flex;
-  gap: 25px;
-  flex-wrap: wrap;
+/* GRID (SAMA DENGAN LIST COURT) */
+.court-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
 }
 
+/* CARD */
 .court-card {
-  width: 300px;
-  background: white;
-  border-radius: 15px;
-  box-shadow: 0 3px 7px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  border-radius: 16px;
   overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+/* IMAGE */
+.court-image {
   position: relative;
 }
 
-.court-card img {
+.court-image img {
   width: 100%;
-  height: 160px;
+  height: 180px;
   object-fit: cover;
 }
 
-.status {
+/* BADGE */
+.badge {
   position: absolute;
   top: 12px;
   right: 12px;
-  padding: 5px 12px;
+  padding: 4px 14px;
   border-radius: 20px;
-  color: white;
   font-size: 12px;
-  background: #82c91e;
+  font-weight: 600;
 }
 
-.status.booked {
-  background: #ff5b5b;
+.badge.available {
+  background: #6de56a;
+  color: #134e13;
 }
 
+/* CONTENT */
 .court-content {
-  padding: 15px;
+  padding: 16px;
+}
+
+.court-content h3 {
+  margin-bottom: 6px;
 }
 
 .court-content small {
   color: #555;
 }
 
-.icon {
-  width: 32px;
-  height: 32px;
-  margin-bottom: 12px;
-  color: #2f6c2f;
+/* BUTTON */
+.court-content button {
+  margin-top: 14px;
+  width: 100%;
+  padding: 10px;
+  background: #0f3d2e;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.court-content button:hover {
+  background: #14532d;
+}
+.price {
+  color: #0f5132;
+  font-size: 18px;
+  font-weight: 700;
+  margin-top: 15px;
+}
+
+.price span {
+  font-size: 12px;
+  font-weight: normal;
 }
 </style>

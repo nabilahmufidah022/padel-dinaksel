@@ -9,7 +9,7 @@
 
         <div class="court-info">
           <h2>{{ booking.courtName }}</h2>
-          <span class="status confirmed">Confirmed</span>
+          <span :class="['status', booking.status]">{{ booking.status }}</span>
 
           <p class="booking-id">Booking ID: {{ booking.bookingId }}</p>
         </div>
@@ -52,32 +52,33 @@
   <div v-else class="not-found">Data pemesanan tidak ditemukan</div>
 </template>
 <script>
+import { useBookingsStore } from '@/stores/bookings'
+
 export default {
   name: 'BookingViewDetail',
 
   data() {
     return {
       booking: null,
+      bookingsStore: null,
     }
   },
 
   mounted() {
     const bookingId = this.$route.params.id
-    const bookings = JSON.parse(localStorage.getItem('bookings')) || []
+    this.bookingsStore = useBookingsStore()
+    this.bookingsStore.load()
 
-    this.booking = bookings.find((b) => b.bookingId === bookingId)
+    this.booking = this.bookingsStore.getById(bookingId)
   },
 
   methods: {
     cancelBooking() {
       if (!confirm('Yakin ingin membatalkan booking ini?')) return
 
-      let bookings = JSON.parse(localStorage.getItem('bookings')) || []
-      bookings = bookings.filter((b) => b.bookingId !== this.booking.bookingId)
-
-      localStorage.setItem('bookings', JSON.stringify(bookings))
+      this.bookingsStore.removeBooking(this.booking.bookingId)
       alert('Booking berhasil dibatalkan')
-      this.$router.push('/booking-list')
+      this.$router.push('/user/my-booking')
     },
   },
 }
@@ -177,6 +178,16 @@ export default {
 .status.confirmed {
   background: #b7eb8f;
   color: #135200;
+}
+
+.status.pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status.rejected {
+  background: #f8d7da;
+  color: #721c24;
 }
 
 /* BUTTON */
