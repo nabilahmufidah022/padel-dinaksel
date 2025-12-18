@@ -65,9 +65,12 @@ export default {
       const user = JSON.parse(localStorage.getItem('user'))
 
       if (user && user.email === this.email && user.password === this.password) {
+        // ✅ INI WAJIB
         localStorage.setItem('loggedIn', 'true')
         localStorage.setItem('role', 'user')
-        this.$router.push('/home')
+
+        // redirect ke halaman user
+        this.$router.push('/user/home')
       } else {
         alert('Email atau password salah')
       }

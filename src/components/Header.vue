@@ -15,9 +15,9 @@
 
       <!-- CENTER -->
       <nav class="nav-menu">
-        <RouterLink to="/home">Home</RouterLink>
-        <RouterLink to="/book">List Court</RouterLink>
-        <RouterLink to="/my-booking">My Bookings</RouterLink>
+        <RouterLink to="/user/home">Home</RouterLink>
+        <RouterLink to="/user/book">List Court</RouterLink>
+        <RouterLink to="/user/my-booking">My Bookings</RouterLink>
       </nav>
 
       <!-- RIGHT -->
@@ -58,6 +58,8 @@ export default {
     },
 
     handleClickOutside(event) {
+      if (!this.$refs.profileArea) return
+
       if (!this.$refs.profileArea.contains(event.target)) {
         this.showProfile = false
       }
@@ -65,11 +67,13 @@ export default {
   },
 
   mounted() {
-    document.addEventListener('click', this.handleClickOutside)
+    // bind handler so `this` refers to the component instance
+    this._boundHandleClickOutside = this.handleClickOutside.bind(this)
+    document.addEventListener('click', this._boundHandleClickOutside)
   },
 
   beforeUnmount() {
-    document.removeEventListener('click', this.handleClickOutside)
+    document.removeEventListener('click', this._boundHandleClickOutside)
   },
 }
 </script>

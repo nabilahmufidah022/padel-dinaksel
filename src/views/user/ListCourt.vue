@@ -39,8 +39,8 @@
           <img :src="court.image" alt="Court Image" />
 
           <!-- BADGE STATUS -->
-          <span class="badge" :class="court.available ? 'available' : 'booked'">
-            {{ court.available ? 'Available' : 'Booked' }}
+          <span class="badge" :class="court.available ? 'available' : 'maintanance'">
+            {{ court.available ? 'Available' : 'Maintanance' }}
           </span>
         </div>
 
@@ -48,7 +48,7 @@
           <h3>{{ court.name }}</h3>
 
           <p class="price">
-            Rp {{ court.price.toLocaleString('id-ID') }}
+            Rp {{ court.price ? court.price.toLocaleString('id-ID') : '-' }}
             <span>/jam</span>
           </p>
 
@@ -65,7 +65,10 @@
     </div>
   </div>
 </template>
+
 <script>
+import { useCourtsStore } from '@/stores/courts'
+
 export default {
   name: 'ListCourt',
 
@@ -75,37 +78,20 @@ export default {
       selectedTime: '',
       availableOnly: false,
       times: ['07:00', '09:00', '11:00', '13:00', '15:00', '17:00'],
-
-      courts: [
-        {
-          id: 1,
-          name: 'Court A - Premium',
-          price: 150000,
-          image:
-            'https://image.made-in-china.com/202f0j00pfGknuYRVVrK/Padel-Court-Padel-Tennis-Court-Regular-Padel-Court.webp',
-          available: true,
-        },
-        {
-          id: 2,
-          name: 'Court B - Standard',
-          price: 120000,
-          image:
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuOSSkSJRGKQmNzyi9ep2PMjYrorXLmFPnpg&s',
-          available: true,
-        },
-        {
-          id: 3,
-          name: 'Court C - Economy',
-          price: 100000,
-          image:
-            'https://blue.kumparan.com/image/upload/fl_progressive,fl_lossy,c_fill,f_auto,q_auto:best,w_640/v1634025439/01jx9dpphphjvaper0f43hfyms.jpg',
-          available: false,
-        },
-      ],
+      courtsStore: null,
     }
   },
 
+  created() {
+    this.courtsStore = useCourtsStore()
+    this.courtsStore.load()
+  },
+
   computed: {
+    courts() {
+      return this.courtsStore ? this.courtsStore.courts : []
+    },
+
     filteredCourts() {
       return this.availableOnly ? this.courts.filter((c) => c.available) : this.courts
     },
@@ -323,7 +309,7 @@ export default {
 }
 
 /* BOOKED */
-.badge.booked {
+.badge.maintanance {
   background: #e0e0e0;
   color: #555;
 }
