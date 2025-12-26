@@ -19,6 +19,14 @@
           <span :class="['badge', booking.status]">{{ booking.status }}</span>
         </p>
 
+        <div class="payment-proof" v-if="booking.paymentProof">
+          <h3>Bukti Pembayaran</h3>
+          <div style="display: flex; align-items: center; gap: 12px">
+            <img :src="booking.paymentProof" alt="bukti" class="payment-proof-img" />
+            <div style="font-size: 14px; color: #555">{{ booking.paymentFileName }}</div>
+          </div>
+        </div>
+
         <div class="actions">
           <button v-if="booking.status === 'pending'" @click="confirmBooking">Confirm</button>
           <button v-if="booking.status === 'pending'" @click="rejectBooking">Reject</button>
@@ -113,6 +121,16 @@ export default {
   color: #721c24;
   padding: 4px 8px;
   border-radius: 8px;
+}
+.payment-proof {
+  margin-top: 12px;
+}
+.payment-proof-img {
+  width: 160px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
 }
 .not-found {
   padding: 20px;

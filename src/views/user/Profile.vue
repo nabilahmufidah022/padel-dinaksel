@@ -3,22 +3,17 @@
     <h1>My Account</h1>
 
     <div class="profile-card">
-      <div class="avatar">JD</div>
+      <div class="avatar">{{ userInitials }}</div>
 
       <div class="info">
         <div class="field">
           <label>Full Name</label>
-          <input value="John Doe" disabled />
+          <input :value="user.name" disabled />
         </div>
 
         <div class="field">
           <label>Email</label>
-          <input value="john@email.com" disabled />
-        </div>
-
-        <div class="field">
-          <label>Phone</label>
-          <input value="+62 812 xxxx xxxx" disabled />
+          <input :value="user.email" disabled />
         </div>
       </div>
     </div>
@@ -28,6 +23,30 @@
 <script>
 export default {
   name: 'Profile',
+  data() {
+    return {
+      user: {
+        name: '',
+        email: '',
+      },
+    }
+  },
+  computed: {
+    userInitials() {
+      return this.user.name
+        .split(' ')
+        .map((n) => n[0])
+        .join('')
+        .toUpperCase()
+    },
+  },
+  mounted() {
+    const user = JSON.parse(localStorage.getItem('user'))
+    if (user) {
+      this.user.name = user.name
+      this.user.email = user.email
+    }
+  },
 }
 </script>
 <style scoped>

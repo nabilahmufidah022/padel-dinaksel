@@ -70,6 +70,21 @@
               <strong>Status:</strong>
               <span :class="['badge', selectedBooking.status]">{{ selectedBooking.status }}</span>
             </p>
+            <div v-if="selectedBooking.paymentProof" style="margin-top: 12px">
+              <h4 style="margin: 8px 0 6px">Bukti Pembayaran</h4>
+              <div style="display: flex; align-items: center; gap: 12px">
+                <img
+                  :src="selectedBooking.paymentProof"
+                  alt="bukti"
+                  class="modal-payment-img"
+                  style="cursor: pointer"
+                  @click="openImageLightbox(selectedBooking.paymentProof)"
+                />
+                <div style="font-size: 14px; color: #555">
+                  {{ selectedBooking.paymentFileName }}
+                </div>
+              </div>
+            </div>
             <div v-if="selectedBooking.note">
               <strong>Catatan:</strong>
               <p>{{ selectedBooking.note }}</p>
@@ -98,6 +113,22 @@
       </div>
     </div>
   </div>
+
+  <!-- IMAGE LIGHTBOX -->
+  <div v-if="showImageLightbox" class="image-lightbox" @click.self="closeImageLightbox">
+    <div class="image-lightbox-inner">
+      <img :src="imageLightboxSrc" alt="preview" />
+      <div class="image-actions">
+        <a
+          :href="imageLightboxSrc"
+          :download="selectedBooking ? selectedBooking.paymentFileName : ''"
+          class="btn download"
+          >Download</a
+        >
+        <button class="btn" @click="closeImageLightbox">Close</button>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -111,6 +142,8 @@ export default {
       bookingsStore: null,
       showModal: false,
       selectedBooking: null,
+      showImageLightbox: false,
+      imageLightboxSrc: null,
     }
   },
 
@@ -147,6 +180,17 @@ export default {
       this.showModal = true
     },
 
+    openImageLightbox(src) {
+      if (!src) return
+      this.imageLightboxSrc = src
+      this.showImageLightbox = true
+    },
+
+    closeImageLightbox() {
+      this.showImageLightbox = false
+      this.imageLightboxSrc = null
+    },
+
     closeModal() {
       this.showModal = false
       this.selectedBooking = null
@@ -157,9 +201,9 @@ export default {
 
 <style scoped>
 .page-container {
-  max-width: 1100px;
-  margin: 80px auto;
-  padding: 0 20px;
+  padding: 32px 40px;
+  max-width: 1200px;
+  margin: 100px auto;
 }
 
 .page-title {
@@ -359,6 +403,62 @@ export default {
 
 .modal-body p {
   margin: 8px 0;
+}
+
+.modal-body .modal-payment-img {
+  width: 160px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.image-lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 20px;
+}
+
+.image-lightbox-inner {
+  background: transparent;
+  max-width: 960px;
+  width: 100%;
+  text-align: center;
+}
+
+.image-lightbox-inner img {
+  max-width: 100%;
+  max-height: 80vh;
+  border-radius: 8px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+}
+
+.image-actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.image-actions .download {
+  background: #0f5132;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  text-decoration: none;
+}
+
+.image-actions .btn {
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: #e2e6ea;
+  border: none;
+  cursor: pointer;
 }
 
 .modal-footer {

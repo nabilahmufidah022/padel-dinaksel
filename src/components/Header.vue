@@ -23,12 +23,12 @@
       <!-- RIGHT -->
       <div class="nav-right" ref="profileArea">
         <div class="profile-wrapper" @click="toggleProfile">
-          <div class="user-circle">JD</div>
-          <span class="username">John</span>
+          <div class="user-circle">{{ userInitials }}</div>
+          <span class="username">{{ user.name || 'User' }}</span>
         </div>
 
         <div v-if="showProfile" class="profile-dropdown">
-          <RouterLink to="/profile">My Account</RouterLink>
+          <RouterLink to="/user/profile">My Account</RouterLink>
           <button class="logout" @click="logout">Logout</button>
         </div>
       </div>
@@ -44,6 +44,23 @@ export default {
     return {
       showProfile: false,
     }
+  },
+
+  computed: {
+    user() {
+      return JSON.parse(localStorage.getItem('user')) || {}
+    },
+
+    userInitials() {
+      const name = this.user.name || ''
+      const parts = name.split(' ')
+      return (
+        parts
+          .map((p) => p.charAt(0))
+          .join('')
+          .toUpperCase() || 'U'
+      )
+    },
   },
 
   methods: {

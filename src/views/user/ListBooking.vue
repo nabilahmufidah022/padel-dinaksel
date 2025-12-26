@@ -111,6 +111,20 @@ export default {
   object-fit: cover;
 }
 
+.payment-thumb img {
+  width: 80px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-right: 12px;
+  border: 1px solid #e5e7eb;
+}
+
+.payment-thumb {
+  display: flex;
+  align-items: center;
+}
+
 /* INFO */
 .booking-info {
   flex: 1;

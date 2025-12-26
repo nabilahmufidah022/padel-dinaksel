@@ -68,6 +68,23 @@
           </div>
         </div>
 
+        <div class="form-group">
+          <label>Unggah Bukti Pembayaran (wajib)</label>
+          <input type="file" accept="image/*" @change="onFileChange" />
+          <div v-if="paymentPreview" style="margin-top: 8px">
+            <img
+              :src="paymentPreview"
+              alt="preview"
+              style="
+                max-width: 160px;
+                max-height: 120px;
+                border-radius: 8px;
+                border: 1px solid #e5e7eb;
+              "
+            />
+          </div>
+        </div>
+
         <button class="btn-book" @click="confirmBooking">Buat Booking</button>
       </div>
     </div>
@@ -90,6 +107,8 @@ export default {
       times: ['07:00', '09:00', '11:00', '13:00', '15:00', '17:00'],
       courtsStore: null,
       bookingsStore: null,
+      paymentFile: null,
+      paymentPreview: null,
     }
   },
 
@@ -122,18 +141,48 @@ export default {
         return
       }
 
-      const booking = this.bookingsStore.addBooking({
-        courtId: this.court.id,
-        courtName: this.court.name,
-        date: this.date,
-        time: this.time,
-        duration: this.duration,
-        total: this.totalPrice,
-        image: this.court.image,
-      })
+      if (!this.paymentFile) {
+        alert('Silakan unggah bukti pembayaran sebelum membuat booking')
+        return
+      }
 
-      alert('Booking berhasil!')
-      this.$router.push('/user/my-booking')
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        const base64 = e.target.result
+
+        this.bookingsStore.load()
+        this.bookingsStore.addBooking({
+          courtId: this.court.id,
+          courtName: this.court.name,
+          date: this.date,
+          time: this.time,
+          duration: this.duration,
+          total: this.totalPrice,
+          image: this.court.image,
+          paymentProof: base64,
+          paymentFileName: this.paymentFile.name,
+        })
+
+        alert('Booking berhasil! (menunggu konfirmasi)')
+        this.$router.push('/user/my-booking')
+      }
+
+      reader.readAsDataURL(this.paymentFile)
+    },
+
+    onFileChange(e) {
+      const f = e.target.files && e.target.files[0]
+      if (!f) {
+        this.paymentFile = null
+        this.paymentPreview = null
+        return
+      }
+      this.paymentFile = f
+      const reader = new FileReader()
+      reader.onload = (ev) => {
+        this.paymentPreview = ev.target.result
+      }
+      reader.readAsDataURL(f)
     },
   },
 }

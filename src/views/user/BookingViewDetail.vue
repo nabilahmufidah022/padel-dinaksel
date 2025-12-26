@@ -17,6 +17,14 @@
 
       <!-- RIGHT -->
       <div class="detail-card">
+        <div v-if="booking.paymentProof" style="margin-top: 12px">
+          <h4 style="margin: 8px 0 6px">Bukti Pembayaran</h4>
+          <div style="display: flex; align-items: center; gap: 12px">
+            <img :src="booking.paymentProof" alt="bukti" class="payment-proof" />
+            <div style="font-size: 14px; color: #555">{{ booking.paymentFileName }}</div>
+          </div>
+        </div>
+
         <h3>Informasi Pemesanan</h3>
 
         <div class="info-row">
@@ -214,6 +222,14 @@ export default {
   color: #ff4d4f;
   background: white;
   font-weight: 600;
+}
+
+.payment-proof {
+  max-width: 220px;
+  max-height: 160px;
+  object-fit: contain;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
 }
 
 /* EMPTY */

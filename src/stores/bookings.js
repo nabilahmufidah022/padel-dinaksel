@@ -35,6 +35,8 @@ export const useBookingsStore = defineStore('bookings', {
         duration: payload.duration || 1,
         total: payload.total || 0,
         image: payload.image || '',
+        paymentProof: payload.paymentProof || '',
+        paymentFileName: payload.paymentFileName || '',
         status: 'pending',
       }
 
